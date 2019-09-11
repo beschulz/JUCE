@@ -370,13 +370,13 @@ public:
                     {
                         const float angle = degreesToRadians (num.getFloatValue());
 
-                        if (parseNextNumber (d, num, false))
+                        if (*d == '0' || *d == '1')
                         {
-                            const bool largeArc = num.getIntValue() != 0;
+                            const bool largeArc = *(d++) != '0';
 
-                            if (parseNextNumber (d, num, false))
+                            if (*d == '0' || *d == '1')
                             {
-                                const bool sweep = num.getIntValue() != 0;
+                                const bool sweep = *(d++) != '0';
 
                                 if (parseCoordsOrSkip (d, p2, false))
                                 {
@@ -1064,7 +1064,7 @@ private:
         if (xml->hasTagName ("use"))
             return useText (xml);
 
-        if (! xml->hasTagName ("text"))
+        if (! xml->hasTagName ("text") && ! xml->hasTagName("tspan"))
             return nullptr;
 
         Array<float> xCoords, yCoords, dxCoords, dyCoords;
