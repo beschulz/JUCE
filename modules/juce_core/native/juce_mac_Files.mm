@@ -415,10 +415,15 @@ bool JUCE_CALLTYPE Process::openDocument (const String& fileName, const String& 
         NSWorkspace* workspace = [NSWorkspace sharedWorkspace];
 
         if (parameters.isEmpty())
+        {
+            // NB: this check is necessary because "[workspace openFile]" when trying to open a URL and sandboxing is
+            // disabled but succeeds when sandboxig is enabled.
+            const auto looksLikeURL = fileName.startsWith("http://") || fileName.startsWith("https://") || fileName.startsWith("mailto:");
             // NB: the length check here is because of strange failures involving long filenames,
             // probably due to filesystem name length limitations..
-            return (fileName.length() < 1024 && [workspace openFile: juceStringToNS (fileName)])
+            return (fileName.length() < 1024 && !looksLikeURL && [workspace openFile: juceStringToNS (fileName)])
                     || [workspace openURL: filenameAsURL];
+        }
 
         const File file (fileName);
 
