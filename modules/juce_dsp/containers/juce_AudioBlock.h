@@ -351,7 +351,7 @@ public:
         SIMDRegister then incrementing dstPos by one will increase the sample position
         in the AudioBuffer's units by a factor of SIMDRegister<SampleType>::SIMDNumElements.
     */
-    forcedinline const AudioBlock& copyTo (AudioBuffer<NumericType>& dst, size_t srcPos = 0, size_t dstPos = 0,
+    forcedinline const AudioBlock& copyTo (AudioBuffer<typename std::remove_const<NumericType>::type>& dst, size_t srcPos = 0, size_t dstPos = 0,
                                            size_t numElements = std::numeric_limits<size_t>::max()) const
     {
         auto dstlen = static_cast<size_t> (dst.getNumSamples()) / sizeFactor;
