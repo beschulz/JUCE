@@ -161,7 +161,7 @@ public:
 
             auto scale = (float) Desktop::getInstance().getDisplays().findDisplayForRect (getScreenBounds()).scale;
 
-            image = c.createComponentSnapshot (c.getLocalBounds(), false, scale);
+            image = c.createComponentSnapshot (c.getLocalBounds(), false, scale * Component::getApproximateScaleFactorForComponent(&c));
 
             setVisible (true);
             toBehind (&c);
