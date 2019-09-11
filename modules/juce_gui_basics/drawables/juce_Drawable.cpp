@@ -180,7 +180,11 @@ std::unique_ptr<Drawable> Drawable::createFromImageData (const void* data, const
     }
     else
     {
-        if (auto svg = parseXMLIfTagMatches (String::createStringFromData (data, (int) numBytes), "svg"))
+        auto svgString = GZIPDecompressorInputStream(new MemoryInputStream(data, numBytes, false), true, GZIPDecompressorInputStream::gzipFormat).readEntireStreamAsString();
+        if(svgString.isEmpty())
+            svgString = String::createStringFromData (data, (int) numBytes);
+
+        if (auto svg = parseXMLIfTagMatches (svgString, "svg"))
             result = Drawable::createFromSVG (*svg);
     }
 
